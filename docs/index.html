@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hexagon Mesh: embeddings made overnight on charging phones</title>
+<meta name="description" content="Send text, get embeddings back. $0.002 per million tokens, first billion tokens every month free. Computed on phones that are charging anyway.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --mist: #EEF3F1;
+    --paper: #F8FAF9;
+    --ink: #14213D;
+    --slate: #5B6B7F;
+    --teal: #0B7373;
+    --teal-bright: #2DD4BF;
+    --lattice: #C9D6D2;
+    --cell: #DCE6E2;
+    --sans: "Instrument Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --mist: #0F1726;
+      --paper: #152033;
+      --ink: #E7EEF0;
+      --slate: #9AA9BA;
+      --teal: #2DD4BF;
+      --lattice: #2A3A52;
+      --cell: #1C2A40;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--mist);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--sans);
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  }
+  a { color: var(--teal); text-underline-offset: 0.18em; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 2px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Hero */
+  header { padding: 2.5rem 0 3.5rem; }
+  .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; font-size: 1.05rem; }
+  .brand svg { width: 28px; height: 28px; }
+  .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3rem; align-items: center; margin-top: 3.5rem; }
+  h1 {
+    font-size: clamp(2.3rem, 5.2vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    max-width: 14ch;
+  }
+  .lede { font-size: 1.25rem; line-height: 1.5; color: var(--slate); max-width: 34ch; margin: 0 0 2rem; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn {
+    display: inline-block; padding: 0.8rem 1.3rem; border-radius: 999px; font-weight: 600;
+    text-decoration: none; font-size: 1rem; border: 2px solid var(--teal);
+  }
+  .btn.primary { background: var(--teal); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn.primary { color: #0F1726; } }
+  .btn.quiet { color: var(--teal); background: transparent; }
+
+  /* The one bold element: the phone mesh */
+  .mesh { width: 100%; max-width: 420px; justify-self: end; margin: 0; }
+  .mesh svg { width: 100%; height: auto; display: block; }
+  .mesh .cell { fill: var(--cell); stroke: var(--lattice); stroke-width: 2; }
+  .mesh .cell.on { fill: var(--teal-bright); stroke: var(--teal); }
+  .mesh .cell.on.lighting { animation: charge 0.9s ease-out both; }
+  @keyframes charge { from { fill: var(--cell); } to { fill: var(--teal-bright); } }
+  @media (prefers-reduced-motion: reduce) { .mesh .cell.on.lighting { animation: none; } }
+  .mesh figcaption { margin-top: 0.9rem; color: var(--slate); font-size: 0.95rem; text-align: center; }
+
+  main section { padding: 3.5rem 0; border-top: 1px solid var(--lattice); }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 1rem; max-width: 22ch; }
+  p { max-width: 64ch; margin: 0 0 1rem; }
+  .muted { color: var(--slate); }
+
+  /* How it works: a real sequence, so it's numbered */
+  ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  ol.steps li { counter-increment: step; position: relative; padding-top: 2.6rem; max-width: 30ch; }
+  ol.steps li::before {
+    content: counter(step); position: absolute; top: 0; left: 0; width: 1.9rem; height: 1.9rem;
+    display: grid; place-items: center; font-weight: 700; font-size: 0.95rem;
+    color: var(--mist); background: var(--teal);
+    clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
+  }
+  .proof { margin-top: 2rem; font-size: 1.15rem; max-width: 60ch; }
+
+  /* Pricing */
+  .price-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin: 0.5rem 0 1.5rem; }
+  .price { font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .price-unit { color: var(--slate); font-size: 1.1rem; }
+  dl.terms { display: grid; grid-template-columns: max-content 1fr; gap: 0.6rem 1.5rem; margin: 0; max-width: 64ch; }
+  dl.terms dt { font-weight: 600; }
+  dl.terms dd { margin: 0; color: var(--slate); }
+
+  /* Code */
+  pre {
+    background: var(--paper); border: 1px solid var(--lattice); border-radius: 10px; padding: 1.1rem 1.25rem;
+    overflow-x: auto; font: 400 0.9rem/1.55 var(--mono); max-width: 100%; margin: 0 0 1rem;
+  }
+  code { font-family: var(--mono); font-size: 0.92em; }
+
+  /* Forms */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  form { display: grid; gap: 0.9rem; max-width: 30rem; margin-top: 1.25rem; }
+  label { display: grid; gap: 0.35rem; font-weight: 500; font-size: 0.97rem; }
+  input, select, textarea {
+    font: inherit; color: var(--ink); background: var(--paper); border: 1.5px solid var(--lattice);
+    border-radius: 10px; padding: 0.7rem 0.85rem; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 25%, transparent); }
+  textarea { min-height: 5.5rem; resize: vertical; }
+  button.btn { cursor: pointer; font: inherit; font-weight: 600; justify-self: start; }
+  .status { min-height: 1.5rem; font-weight: 500; }
+  .status.ok { color: var(--teal); }
+  .status.err { color: #B42318; }
+  @media (prefers-color-scheme: dark) { .status.err { color: #FF8A80; } }
+  .rules { padding-left: 1.2rem; margin: 0 0 1rem; max-width: 60ch; }
+  .rules li { margin-bottom: 0.3rem; }
+  .qr { display: flex; gap: 1.25rem; align-items: center; margin-top: 2rem; max-width: 30rem; }
+  .qr img { width: 150px; height: 150px; background: #fff; padding: 6px; border-radius: 8px; border: 1px solid var(--lattice); }
+  .qr p { margin: 0; font-size: 0.97rem; }
+
+  footer { border-top: 1px solid var(--lattice); padding: 2rem 0 3rem; color: var(--slate); font-size: 0.95rem; }
+  footer p { margin: 0 0 0.35rem; }
+
+  @media (max-width: 860px) {
+    .hero, .split { grid-template-columns: 1fr; }
+    .mesh { justify-self: start; max-width: 340px; }
+    ol.steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    ol.steps { grid-template-columns: 1fr; }
+    header { padding-top: 1.5rem; }
+    .hero { margin-top: 2rem; gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="3.5" fill="#2DD4BF"/></svg>
+      Hexagon Mesh
+    </div>
+    <div class="hero">
+      <div>
+        <h1>Embeddings made overnight on phones that are charging anyway</h1>
+        <p class="lede">Send text, get vectors back. <strong>$0.002 per million tokens</strong>, and the first billion tokens every month are free.</p>
+        <div class="actions">
+          <a class="btn primary" href="#api-key">Request an API key</a>
+          <a class="btn quiet" href="#phones">Put your phone to work</a>
+        </div>
+      </div>
+      <figure class="mesh" aria-describedby="mesh-caption">
+        <svg id="mesh" viewBox="56 24 308 332" role="img" aria-label="A honeycomb of phones; lit cells are phones online"></svg>
+        <figcaption id="mesh-caption">A pilot network of three phones is running now.</figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <div class="wrap">
+      <h2>How your job gets done</h2>
+      <ol class="steps">
+        <li>Your texts are split into small tickets of 32.</li>
+        <li>Each ticket runs on two phones owned by different people, only while they're charging, cool, and on Wi-Fi.</li>
+        <li>When both phones return the same answer, it's accepted. Anything that doesn't match runs again on other phones.</li>
+        <li>You get every embedding back in your original order.</li>
+      </ol>
+      <p class="proof">On a Galaxy S25 Ultra, the phone's AI chip turns about 45,700 tokens a second into embeddings, matching a full-precision computer to 0.9992.</p>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <h2>One price, no tiers</h2>
+      <div class="price-line"><span class="price">$0.002</span><span class="price-unit">per million tokens</span></div>
+      <dl class="terms">
+        <dt>Free every month</dt><dd>The first 1,000,000,000 tokens</dd>
+        <dt>Model</dt><dd>all-MiniLM-L6-v2, 384 dimensions, up to 256 tokens per text</dd>
+        <dt>Best for</dt><dd>Large batches that can finish overnight</dd>
+        <dt>Your data</dt><dd>Public, non-personal text only. Texts and results are deleted after 7 days.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="developers">
+    <div class="wrap">
+      <h2>Already using OpenAI's embeddings API?</h2>
+      <p>Point your client at Hexagon Mesh and change the model name. You get the address with your key.</p>
+<pre><code>from openai import OpenAI
+
+client = OpenAI(base_url="YOUR_HEXAGON_ADDRESS/v1", api_key="YOUR_KEY")
+result = client.embeddings.create(
+    model="all-MiniLM-L6-v2",
+    input=["first document", "second document"],
+)</code></pre>
+      <p class="muted">Big batch? Send up to 100,000 texts per job to <code>/v1/jobs</code>, or use the <a href="https://github.com/mikebains41-debug/hexagon-mesh-app/blob/main/tools/embed_file.py">file tool</a>: a text, CSV, or JSON lines file in, an embeddings file out.</p>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="wrap split">
+      <div id="api-key">
+        <h2>Request an API key</h2>
+        <p class="muted">The pilot is small, so keys are issued by hand, usually within a day.</p>
+        <form id="customer-form" novalidate>
+          <label>Name or company <input name="name" autocomplete="organization" required></label>
+          <label>Email <input name="email" type="email" autocomplete="email" required></label>
+          <label>What will you embed? <textarea name="note" placeholder="For example: 2 million public product descriptions"></textarea></label>
+          <button class="btn primary" type="submit">Request a key</button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div id="phones">
+        <h2>Your phone can earn while it charges</h2>
+        <ul class="rules">
+          <li>Works only when plugged in, above 80% battery, under 38 °C, and on Wi-Fi.</li>
+          <li>Never touches your photos, messages, contacts, or location.</li>
+          <li>Snapdragon phones like the Galaxy S25 series, S26 Ultra, and Z Fold earn the most.</li>
+        </ul>
+        <form id="phone-form" novalidate>
+          <label>Email <input name="email" type="email" autocomplete="email" required></label>
+          <label>Phone
+            <select name="phone_model">
+              <option>Galaxy S25 Ultra</option><option>Galaxy S25 or S25+</option><option>Galaxy S26 Ultra</option>
+              <option>Galaxy Z Fold</option><option>Other Snapdragon phone</option><option>Other Android phone</option>
+            </select>
+          </label>
+          <label>Country <input name="country" autocomplete="country-name"></label>
+          <button class="btn primary" type="submit">Join the waitlist</button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="qr">
+          <img src="install-qr.png" alt="QR code that downloads the Hexagon Mesh Android app">
+          <p>Already invited to the pilot? Scan this with your phone's camera to install the app.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Hexagon Mesh is built by GPU Optimizer Inc., Canada.</p>
+    <p><a href="https://github.com/mikebains41-debug/hexagon-mesh-app/blob/main/docs/PRIVACY.md">Privacy policy</a>. Questions: <a href="mailto:mike@gpu-optimizer.com">mike@gpu-optimizer.com</a></p>
+  </div>
+</footer>
+
+<script>
+  // Set to the server's address once it's live, e.g. "https://hexagon-mesh.onrender.com".
+  // Empty: forms open an email instead, and the mesh shows the pilot.
+  const API = "";
+  const CONTACT = "mike@gpu-optimizer.com";
+
+  // The honeycomb: 19 cells, the centre first, then two rings.
+  const svg = document.getElementById("mesh");
+  const R = 38, cx = 210, cy = 190;
+  const cells = [];
+  const dirs = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
+  cells.push([0, 0]);
+  for (let ring = 1; ring <= 2; ring++) {
+    let q = -ring, r = ring;  // start at the lower-left corner of the ring
+    for (const [dq, dr] of dirs) for (let i = 0; i < ring; i++) { cells.push([q, r]); q += dq; r += dr; }
+  }
+  const polys = cells.map(([q, r]) => {
+    const x = cx + R * 1.5 * q, y = cy + R * Math.sqrt(3) * (r + q / 2);
+    const pts = [...Array(6)].map((_, k) => {
+      const a = Math.PI / 3 * k;
+      return (x + (R - 3) * Math.cos(a)).toFixed(1) + "," + (y + (R - 3) * Math.sin(a)).toFixed(1);
+    }).join(" ");
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    p.setAttribute("points", pts);
+    p.setAttribute("class", "cell");
+    svg.appendChild(p);
+    return p;
+  });
+  function light(n) {
+    n = Math.max(0, Math.min(n, polys.length));
+    polys.forEach((p, i) => {
+      if (i < n) { p.classList.add("on", "lighting"); p.style.animationDelay = (i * 0.12) + "s"; }
+      else p.classList.remove("on", "lighting");
+    });
+  }
+  light(3);  // the pilot: three phones
+  if (API) {
+    fetch(API + "/v1/network").then(r => r.json()).then(d => {
+      light(d.phones_online);
+      const phones = d.phones_online === 1 ? "phone" : "phones";
+      document.getElementById("mesh-caption").textContent =
+        d.phones_online + " " + phones + " online now, " + Number(d.tokens_verified).toLocaleString() + " tokens verified so far.";
+    }).catch(() => {});
+  }
+
+  // Forms: send to the server's waitlist, or fall back to email while the server isn't live.
+  function wire(id, kind, subject) {
+    const form = document.getElementById(id);
+    const status = form.querySelector(".status");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      status.className = "status";
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(data.email || "")) {
+        status.className = "status err";
+        status.textContent = "Enter an email address so we can reach you.";
+        form.querySelector("input[type=email]").focus();
+        return;
+      }
+      if (!API) {
+        const body = Object.entries(data).map(([k, v]) => k + ": " + v).join("\n");
+        location.href = "mailto:" + CONTACT + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        status.textContent = "Your email app should open with the details filled in.";
+        return;
+      }
+      try {
+        const r = await fetch(API + "/v1/waitlist", {
+          method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(Object.assign({kind}, data)),
+        });
+        if (!r.ok) throw new Error((await r.json()).error?.message || "Request failed");
+        form.reset();
+        status.className = "status ok";
+        status.textContent = kind === "customer" ? "Request sent. Your key will arrive by email." : "You're on the waitlist. We'll email you when there's a spot.";
+      } catch (err) {
+        status.className = "status err";
+        status.textContent = "That didn't go through: " + err.message + ". You can also email " + CONTACT + ".";
+      }
+    });
+  }
+  wire("customer-form", "customer", "Hexagon Mesh API key request");
+  wire("phone-form", "phone", "Hexagon Mesh phone waitlist");
+</script>
+</body>
+</html>
