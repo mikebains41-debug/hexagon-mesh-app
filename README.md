@@ -1,6 +1,6 @@
 # Hexagon Mesh app
 
-Downloads for the Hexagon Mesh Android app by GPU Optimizer Inc. While your phone charges, it processes small AI jobs for businesses, and verified work is credited to you.
+Downloads for the Hexagon Mesh Android app, built by Manmohan Bains. While your phone charges, it processes small AI jobs for businesses, and verified work is credited to you.
 
 ## Scan to install
 

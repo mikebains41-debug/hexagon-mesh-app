@@ -1,6 +1,6 @@
 # Hexagon Mesh Privacy Policy
 
-Effective September 27, 2026. Operated by GPU Optimizer Inc. (Canada). Contact: thehexamesh@gmail.com
+Effective September 27, 2026. Operated by Manmohan Bains (Canada). Contact: thehexamesh@gmail.com
 
 [한국어는 아래에 있습니다](#개인정보-처리방침)
 
@@ -52,7 +52,7 @@ If this policy changes, we will update this page and tell you in the app.
 
 # 개인정보 처리방침
 
-시행일: 2026년 9월 27일. 운영: GPU Optimizer Inc. (캐나다). 개인정보 보호책임자: Mike Bains, thehexamesh@gmail.com
+시행일: 2026년 9월 27일. 운영: Manmohan Bains (캐나다). 개인정보 보호책임자: Manmohan Bains, thehexamesh@gmail.com
 
 ## Hexagon Mesh 소개
 
