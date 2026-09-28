@@ -1,6 +1,6 @@
 # Hexagon Mesh Privacy Policy
 
-Effective September 27, 2026. Operated by GPU Optimizer Inc. (Canada). Contact: mike@gpu-optimizer.com
+Effective September 27, 2026. Operated by GPU Optimizer Inc. (Canada). Contact: thehexamesh@gmail.com
 
 [한국어는 아래에 있습니다](#개인정보-처리방침)
 
@@ -34,7 +34,7 @@ Customers receive only the results of their own tasks. They never receive your n
 
 ## Retention and deletion
 
-Work records and payout details are kept while you use the service, and afterwards only as long as tax and accounting laws require. To delete your data at any time, email mike@gpu-optimizer.com.
+Work records and payout details are kept while you use the service, and afterwards only as long as tax and accounting laws require. To delete your data at any time, email thehexamesh@gmail.com.
 
 ## App updates (direct-download version only)
 
@@ -52,7 +52,7 @@ If this policy changes, we will update this page and tell you in the app.
 
 # 개인정보 처리방침
 
-시행일: 2026년 9월 27일. 운영: GPU Optimizer Inc. (캐나다). 개인정보 보호책임자: Mike Bains, mike@gpu-optimizer.com
+시행일: 2026년 9월 27일. 운영: GPU Optimizer Inc. (캐나다). 개인정보 보호책임자: Mike Bains, thehexamesh@gmail.com
 
 ## Hexagon Mesh 소개
 
@@ -84,7 +84,7 @@ Hexagon Mesh는 휴대폰이 충전 중일 때 기업 고객의 작은 AI 작업
 
 ## 보관 및 파기
 
-작업 기록과 정산 정보는 서비스 이용 기간 동안 보관하며, 이후에는 세법 및 회계 관련 법령이 정한 기간 동안만 보관합니다. 언제든지 mike@gpu-optimizer.com 으로 삭제를 요청하실 수 있습니다.
+작업 기록과 정산 정보는 서비스 이용 기간 동안 보관하며, 이후에는 세법 및 회계 관련 법령이 정한 기간 동안만 보관합니다. 언제든지 thehexamesh@gmail.com 으로 삭제를 요청하실 수 있습니다.
 
 ## 앱 업데이트 (직접 다운로드 버전만 해당)
 

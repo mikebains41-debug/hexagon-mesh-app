@@ -15,4 +15,4 @@ After the first install, updates arrive inside the app.
 
 - Website: https://mikebains41-debug.github.io/hexagon-mesh-app/
 - Privacy policy: [docs/PRIVACY.md](docs/PRIVACY.md)
-- Contact: mike@gpu-optimizer.com
+- Contact: thehexamesh@gmail.com
