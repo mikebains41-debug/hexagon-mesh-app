@@ -20,6 +20,7 @@ import urllib.error
 import urllib.request
 
 URL = os.environ.get("HM_URL", "http://127.0.0.1:8080").rstrip("/")
+STALL_SECONDS = int(os.environ.get("HM_STALL_SECONDS", "600"))
 KEY = os.environ.get("HM_API_KEY", "")
 
 
@@ -68,25 +69,20 @@ def read_texts(path, field):
     return items
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("input")
-    ap.add_argument("output")
-    ap.add_argument("--field", default="text")
-    ap.add_argument("--batch", type=int, default=5000)
-    a = ap.parse_args()
-    items = read_texts(a.input, a.field)
-    if not items:
-        sys.exit("No texts found in " + a.input)
-    print("%d texts from %s" % (len(items), a.input))
-    jobs = []
-    for start in range(0, len(items), a.batch):
-        chunk = [t for _, t in items[start:start + a.batch]]
-        r = call("POST", "/v1/jobs", {"input": chunk, "model": "all-MiniLM-L6-v2"})
+def embed(items, batch=5000, replicas=None, progress=print):
+    """Send texts as jobs, wait for all of them, and return (rows, job_ids, tokens) in input order."""
+    jobs, tokens = [], 0
+    for start in range(0, len(items), batch):
+        chunk = [t for _, t in items[start:start + batch]]
+        body = {"input": chunk, "model": "all-MiniLM-L6-v2"}
+        if replicas:
+            body["replicas"] = replicas
+        r = call("POST", "/v1/jobs", body)
         jobs.append((start, r["id"]))
-        print("  sent texts %d to %d (job %s, %s tokens)" % (start + 1, start + len(chunk), r["id"][:8],
-                                                            "{:,}".format(r["tokens"])))
-    done = {}
+        tokens += r["tokens"]
+        progress("  sent texts %d to %d (job %s, %s tokens)" % (start + 1, start + len(chunk), r["id"][:8],
+                                                               "{:,}".format(r["tokens"])))
+    done, last_count, last_change = {}, -1, time.time()
     while len(done) < len(jobs):
         for start, jid in jobs:
             if jid in done:
@@ -94,18 +90,46 @@ def main():
             r = call("GET", "/v1/jobs/" + jid)
             if r["status"] == "complete":
                 done[jid] = (start, r["data"])
-            elif r["status"] == "partial":
-                sys.exit("Job %s could not be fully verified; please run again." % jid)
+            elif r["status"] in ("partial", "expired"):
+                sys.exit("Job %s could not be finished (%s); please run again." % (jid, r["status"]))
         finished = sum(len(v[1]) for v in done.values())
-        print("  %d of %d texts done" % (finished, len(items)))
+        progress("  %d of %d texts done" % (finished, len(items)))
+        if finished != last_count:
+            last_count, last_change = finished, time.time()
+        elif time.time() - last_change > STALL_SECONDS:
+            mins = max(1, STALL_SECONDS // 60)
+            progress("  No progress for %d minute%s. Check the phones are plugged in, on Wi-Fi, above 80%% battery, "
+                     "with the node switched on (python tools/network_status.py shows them). Checked jobs need two "
+                     "phones working. The job keeps waiting; Ctrl+C stops waiting." % (mins, "" if mins == 1 else "s"))
+            last_change = time.time()
         if len(done) < len(jobs):
             time.sleep(10)
+    rows = []
+    for start, data in sorted(done.values()):
+        for d in data:
+            i = start + d["index"]
+            rows.append({"index": i, "id": items[i][0], "embedding": d["embedding"]})
+    return rows, [jid for _, jid in jobs], tokens
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("input")
+    ap.add_argument("output")
+    ap.add_argument("--field", default="text")
+    ap.add_argument("--batch", type=int, default=5000)
+    ap.add_argument("--single-phone", action="store_true",
+                    help="operator only: one phone per ticket instead of two (ignored for customer keys)")
+    a = ap.parse_args()
+    items = read_texts(a.input, a.field)
+    if not items:
+        sys.exit("No texts found in " + a.input)
+    print("%d texts from %s" % (len(items), a.input))
+    rows, _, _ = embed(items, a.batch, 1 if a.single_phone else None)
     with open(a.output, "w", encoding="utf-8") as out:
-        for start, data in sorted(done.values()):
-            for d in data:
-                i = start + d["index"]
-                out.write(json.dumps({"index": i, "id": items[i][0], "embedding": d["embedding"]}) + "\n")
-    print("Wrote %d embeddings to %s" % (len(items), a.output))
+        for row in rows:
+            out.write(json.dumps(row) + "\n")
+    print("Wrote %d embeddings to %s" % (len(rows), a.output))
 
 
 if __name__ == "__main__":
