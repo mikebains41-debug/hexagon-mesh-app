@@ -182,16 +182,32 @@
         <li>When both phones return the same answer, it's accepted. Anything that doesn't match runs again on other phones.</li>
         <li>You get every embedding back in your original order.</li>
       </ol>
-      <p class="proof">On a Galaxy S25 Ultra, the phone's AI chip turns about 45,700 tokens a second into embeddings, matching a full-precision computer to 0.9992.</p>
+      <p class="proof">In lab tests on a Galaxy S25 Ultra with full-length texts, the phone's AI chip turns about 45,700 tokens a second into embeddings, matching a full-precision computer to 0.9992.</p>
     </div>
   </section>
+
+  <!-- results:start -->
+  <section id="results">
+    <div class="wrap">
+      <h2>Results so far</h2>
+      <p class="muted">Measured on our live network of three Samsung Galaxy phones, with every result checked on two phones.</p>
+      <dl class="terms">
+        <dt>Search quality</dt><dd>64.5 nDCG@10 on the SciFact benchmark (300 questions, 5,183 science abstracts), matching the published score for all-MiniLM-L6-v2</dd>
+        <dt>arXiv</dt><dd>3,225,386 abstracts in 18 hours 37 minutes. <a href="https://huggingface.co/datasets/Hexagonmesh/arxiv-abstracts-on-phones">Free dataset on Hugging Face</a></dd>
+        <dt>Simple Wikipedia</dt><dd>644,083 passages; the latest run took 3 hours 18 minutes. <a href="https://huggingface.co/datasets/Hexagonmesh/simple-wikipedia-on-phones">Free dataset on Hugging Face</a></dd>
+        <dt>Wrong answers</dt><dd>A test phone sent 1,760 deliberately wrong answers. None reached the results, and it was suspended within a second</dd>
+        <dt>Speed</dt><dd>116 passages a second with three phones, every passage checked twice</dd>
+      </dl>
+    </div>
+  </section>
+  <!-- results:end -->
 
   <section id="pricing">
     <div class="wrap">
       <h2>One price, no tiers</h2>
       <div class="price-line"><span class="price">$0.002</span><span class="price-unit">per million tokens</span></div>
       <dl class="terms">
-        <dt>Free every month</dt><dd>The first 1,000,000,000 tokens</dd>
+        <dt>Free first job</dt><dd>Up to 100,000,000 tokens, one time</dd>
         <dt>Model</dt><dd>all-MiniLM-L6-v2, 384 dimensions, up to 256 tokens per text</dd>
         <dt>Best for</dt><dd>Large batches that can finish overnight</dd>
         <dt>Your data</dt><dd>Public, non-personal text only. Texts and results are deleted after 7 days.</dd>
