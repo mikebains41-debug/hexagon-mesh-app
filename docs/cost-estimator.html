@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What would embedding your text cost? Hexagon Mesh cost estimator</title>
+<meta name="description" content="Work out the cost of embedding public English text at $0.005 per million tokens, with the first 1 billion tokens every month free. Worked examples and a small calculator. Phones do not replace data centers.">
+<link rel="canonical" href="https://mikebains41-debug.github.io/hexagon-mesh-app/cost-estimator.html">
+<style>
+  :root {
+    --mist:#EEF3F1; --paper:#F8FAF9; --ink:#14213D; --slate:#5B6B7F; --teal:#0B7373; --lattice:#C9D6D2;
+    --sans:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --mist:#0F1726; --paper:#152033; --ink:#E7EEF0; --slate:#9AA9BA; --teal:#2DD4BF; --lattice:#2A3A52; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin:0; background:var(--mist); color:var(--ink); font:400 1.0625rem/1.6 var(--sans);
+    padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); }
+  a { color:var(--teal); text-underline-offset:.18em; }
+  :focus-visible { outline:3px solid var(--teal); outline-offset:3px; border-radius:2px; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 1.5rem; }
+  .brand { display:flex; align-items:center; gap:.6rem; font-weight:600; padding-top:1.5rem; }
+  .brand svg { width:28px; height:28px; }
+  h1 { font-size:clamp(1.9rem,5vw,3rem); line-height:1.1; letter-spacing:-.03em; margin:1.5rem 0 1rem; max-width:20ch; }
+  h2 { font-size:clamp(1.4rem,3vw,2rem); line-height:1.15; margin:0 0 1rem; max-width:24ch; }
+  p { max-width:64ch; margin:0 0 1rem; }
+  .muted { color:var(--slate); }
+  main section { padding:2.5rem 0; border-top:1px solid var(--lattice); }
+  .callout { border-left:4px solid var(--teal); padding:.2rem 0 .2rem 1rem; margin:1rem 0; max-width:64ch; }
+  .tablewrap { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; min-width:30rem; background:var(--paper); border:1px solid var(--lattice); }
+  th, td { text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--lattice); vertical-align:top; }
+  th { font-weight:600; }
+  td.num, th.num { text-align:right; white-space:nowrap; font-family:var(--mono); font-size:.95rem; }
+  form { display:grid; gap:.9rem; max-width:26rem; }
+  label { display:grid; gap:.35rem; font-weight:500; }
+  input { font:inherit; color:var(--ink); background:var(--paper); border:1.5px solid var(--lattice); border-radius:10px; padding:.7rem .85rem; width:100%; }
+  input:focus { border-color:var(--teal); outline:none; box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 25%,transparent); }
+  .result { font-weight:600; min-height:3rem; }
+  ol { padding-left:1.2rem; max-width:60ch; }
+  li { margin-bottom:.4rem; }
+  footer { border-top:1px solid var(--lattice); padding:2rem 0 3rem; color:var(--slate); font-size:.95rem; }
+  footer p { margin:0 0 .35rem; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="3.5" fill="#2DD4BF"/></svg> Hexagon Mesh</div>
+  <h1>What would embedding your text cost?</h1>
+  <p class="muted">A plain worked estimate for a company with a large pile of public English text. The price is $0.005 per million tokens, and the first 1,000,000,000 tokens every month are free.</p>
+  <p class="callout"><strong>Phones do not replace data centers.</strong> This is a low-cost option for large, patient batches of public text. These are arithmetic from the listed price, not invoices. The public API is not live yet; see the access note at the bottom.</p>
+</div></header>
+<main>
+<section><div class="wrap">
+  <h2>Step 1: count your tokens</h2>
+  <p>Price is per token, not per text. A token is a small piece of a word. The only real data point we have is the Simple English Wikipedia run: 644,083 passages came to 67.9 million tokens, which is roughly 105 tokens per passage on average (67.9 million divided by 644,083). Your text will differ, so count your own if you can.</p>
+  <p class="muted">Texts are cut off at 256 tokens, so no single text counts for more than 256.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Step 2: the arithmetic, for some sizes</h2>
+  <p>The $0.005 per million tokens price only applies to tokens above the free 1 billion each month. The first 1,000,000,000 tokens every month cost nothing.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Example job</th><th class="num">Tokens</th><th class="num">At $0.005 per million, before the free allowance</th><th class="num">After the free 1 billion</th></tr></thead>
+    <tbody>
+      <tr><td>Simple English Wikipedia (the real run on three phones)</td><td class="num">67.9 million</td><td class="num">$0.34</td><td class="num">$0.00</td></tr>
+      <tr><td>A job of 100 million tokens</td><td class="num">100 million</td><td class="num">$0.50</td><td class="num">$0.00</td></tr>
+      <tr><td>A job of 1 billion tokens</td><td class="num">1 billion</td><td class="num">$5.00</td><td class="num">$0.00</td></tr>
+      <tr><td>A job of 2 billion tokens</td><td class="num">2 billion</td><td class="num">$10.00</td><td class="num">$5.00</td></tr>
+      <tr><td>A job of 10 billion tokens</td><td class="num">10 billion</td><td class="num">$50.00</td><td class="num">$45.00</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="muted" style="margin-top:1rem">Time is a separate question. Only the Simple Wikipedia run has been timed on the real network of three phones: 3 hours 18 minutes for the latest run (4 hours 27 minutes for the first run, October 2026). Very large jobs have not been timed, and we do not promise a finish time for them.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Try your own number</h2>
+  <form id="calc" novalidate>
+    <label>Number of texts <input id="texts" inputmode="numeric" placeholder="for example 2000000"></label>
+    <label>Average tokens per text <input id="avg" inputmode="numeric" placeholder="for example 105, maximum 256"></label>
+  </form>
+  <p class="result" id="out" role="status" aria-live="polite">Enter both numbers to see an estimate.</p>
+  <p class="muted">Runs in your browser only. Nothing is sent anywhere.</p>
+  <noscript><p>This calculator needs JavaScript. The table above shows the same arithmetic for fixed sizes.</p></noscript>
+</div></section>
+
+<section><div class="wrap">
+  <h2>What this does not include</h2>
+  <ol>
+    <li>Only public, non-personal English text can be embedded. Client data is deleted after 7 days.</li>
+    <li>The model is all-MiniLM-L6-v2: 384 numbers per text, up to 256 tokens per text.</li>
+    <li>Your own costs afterwards, such as storing and searching the vectors, are not included.</li>
+    <li>A data center service will be faster, and will handle private data and other models.</li>
+  </ol>
+  <h2>How to start</h2>
+  <p>The public API is not live yet. For now, email a link to your file to <a href="mailto:thehexamesh@gmail.com">thehexamesh@gmail.com</a> and the embeddings come back as a file. Read the <a href="is-it-right-for-you.html">plain guide</a> first to check your text is a good fit.</p>
+  <p><a href="index.html">&larr; Back to the home page</a></p>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <p>Hexagon Mesh is built by Manmohan Bains in Canada.</p>
+  <p><a href="https://github.com/mikebains41-debug/hexagon-mesh-app/blob/main/docs/PRIVACY.md">Privacy policy</a>. Questions: <a href="mailto:thehexamesh@gmail.com">thehexamesh@gmail.com</a></p>
+</div></footer>
+<script>
+(function () {
+  var t = document.getElementById("texts"), a = document.getElementById("avg"), out = document.getElementById("out");
+  var FREE = 1e9, PRICE = 0.005;
+  function money(x) { return "$" + x.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+  function run() {
+    var n = parseFloat(t.value.replace(/,/g, "")), k = parseFloat(a.value.replace(/,/g, ""));
+    if (!(n > 0) || !(k > 0)) { out.textContent = "Enter both numbers to see an estimate."; return; }
+    if (k > 256) k = 256;
+    var tokens = n * k, listed = tokens / 1e6 * PRICE, paid = Math.max(0, tokens - FREE) / 1e6 * PRICE;
+    out.textContent = "About " + Math.round(tokens).toLocaleString("en-US") + " tokens. " + money(listed) +
+      " before the free allowance; " + money(paid) + " after the first 1 billion free tokens. An estimate, not an invoice.";
+  }
+  t.addEventListener("input", run); a.addEventListener("input", run);
+  document.getElementById("calc").addEventListener("submit", function (e) { e.preventDefault(); });
+})();
+</script>
+</body>
+</html>
