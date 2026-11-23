@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What can you do with the embeddings? Search, SEO, catalogs, research</title>
+<meta name="description" content="Four plain examples of what a company can do with embeddings of public English text: search, related-page links, product catalogs and research. With the limits of each. Phones do not replace data centers.">
+<link rel="canonical" href="https://mikebains41-debug.github.io/hexagon-mesh-app/use-cases.html">
+<style>
+  :root {
+    --mist: #EEF3F1;
+    --paper: #F8FAF9;
+    --ink: #14213D;
+    --slate: #5B6B7F;
+    --teal: #0B7373;
+    --teal-bright: #2DD4BF;
+    --lattice: #C9D6D2;
+    --cell: #DCE6E2;
+    --sans: "Instrument Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --mist: #0F1726;
+      --paper: #152033;
+      --ink: #E7EEF0;
+      --slate: #9AA9BA;
+      --teal: #2DD4BF;
+      --lattice: #2A3A52;
+      --cell: #1C2A40;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--mist);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--sans);
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  }
+  a { color: var(--teal); text-underline-offset: 0.18em; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 2px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Hero */
+  header { padding: 2.5rem 0 3.5rem; }
+  .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; font-size: 1.05rem; }
+  .brand svg { width: 28px; height: 28px; }
+  .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3rem; align-items: center; margin-top: 3.5rem; }
+  h1 {
+    font-size: clamp(2.3rem, 5.2vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    max-width: 14ch;
+  }
+  .lede { font-size: 1.25rem; line-height: 1.5; color: var(--slate); max-width: 34ch; margin: 0 0 2rem; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn {
+    display: inline-block; padding: 0.8rem 1.3rem; border-radius: 999px; font-weight: 600;
+    text-decoration: none; font-size: 1rem; border: 2px solid var(--teal);
+  }
+  .btn.primary { background: var(--teal); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn.primary { color: #0F1726; } }
+  .btn.quiet { color: var(--teal); background: transparent; }
+
+  /* The one bold element: the phone mesh */
+  .mesh { width: 100%; max-width: 420px; justify-self: end; margin: 0; }
+  .mesh svg { width: 100%; height: auto; display: block; }
+  .mesh .cell { fill: var(--cell); stroke: var(--lattice); stroke-width: 2; }
+  .mesh .cell.on { fill: var(--teal-bright); stroke: var(--teal); }
+  .mesh .cell.on.lighting { animation: charge 0.9s ease-out both; }
+  @keyframes charge { from { fill: var(--cell); } to { fill: var(--teal-bright); } }
+  @media (prefers-reduced-motion: reduce) { .mesh .cell.on.lighting { animation: none; } }
+  .mesh figcaption { margin-top: 0.9rem; color: var(--slate); font-size: 0.95rem; text-align: center; }
+
+  main section { padding: 3.5rem 0; border-top: 1px solid var(--lattice); }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 1rem; max-width: 22ch; }
+  p { max-width: 64ch; margin: 0 0 1rem; }
+  .muted { color: var(--slate); }
+
+  /* How it works: a real sequence, so it's numbered */
+  ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  ol.steps li { counter-increment: step; position: relative; padding-top: 2.6rem; max-width: 30ch; }
+  ol.steps li::before {
+    content: counter(step); position: absolute; top: 0; left: 0; width: 1.9rem; height: 1.9rem;
+    display: grid; place-items: center; font-weight: 700; font-size: 0.95rem;
+    color: var(--mist); background: var(--teal);
+    clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
+  }
+  .proof { margin-top: 2rem; font-size: 1.15rem; max-width: 60ch; }
+
+  /* Pricing */
+  .price-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin: 0.5rem 0 1.5rem; }
+  .price { font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .price-unit { color: var(--slate); font-size: 1.1rem; }
+  dl.terms { display: grid; grid-template-columns: max-content 1fr; gap: 0.6rem 1.5rem; margin: 0; max-width: 64ch; }
+  dl.terms dt { font-weight: 600; }
+  dl.terms dd { margin: 0; color: var(--slate); }
+
+  /* Code */
+  pre {
+    background: var(--paper); border: 1px solid var(--lattice); border-radius: 10px; padding: 1.1rem 1.25rem;
+    overflow-x: auto; font: 400 0.9rem/1.55 var(--mono); max-width: 100%; margin: 0 0 1rem;
+  }
+  code { font-family: var(--mono); font-size: 0.92em; }
+
+  /* Forms */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  form { display: grid; gap: 0.9rem; max-width: 30rem; margin-top: 1.25rem; }
+  label { display: grid; gap: 0.35rem; font-weight: 500; font-size: 0.97rem; }
+  input, select, textarea {
+    font: inherit; color: var(--ink); background: var(--paper); border: 1.5px solid var(--lattice);
+    border-radius: 10px; padding: 0.7rem 0.85rem; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 25%, transparent); }
+  textarea { min-height: 5.5rem; resize: vertical; }
+  button.btn { cursor: pointer; font: inherit; font-weight: 600; justify-self: start; }
+  .status { min-height: 1.5rem; font-weight: 500; }
+  .status.ok { color: var(--teal); }
+  .status.err { color: #B42318; }
+  @media (prefers-color-scheme: dark) { .status.err { color: #FF8A80; } }
+  .rules { padding-left: 1.2rem; margin: 0 0 1rem; max-width: 60ch; }
+  .rules li { margin-bottom: 0.3rem; }
+  .qr { display: flex; gap: 1.25rem; align-items: center; margin-top: 2rem; max-width: 30rem; }
+  .qr img { width: 150px; height: 150px; background: #fff; padding: 6px; border-radius: 8px; border: 1px solid var(--lattice); }
+  .qr p { margin: 0; font-size: 0.97rem; }
+
+  footer { border-top: 1px solid var(--lattice); padding: 2rem 0 3rem; color: var(--slate); font-size: 0.95rem; }
+  footer p { margin: 0 0 0.35rem; }
+
+  @media (max-width: 860px) {
+    .hero, .split { grid-template-columns: 1fr; }
+    .mesh { justify-self: start; max-width: 340px; }
+    ol.steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    ol.steps { grid-template-columns: 1fr; }
+    header { padding-top: 1.5rem; }
+    .hero { margin-top: 2rem; gap: 2rem; }
+  }
+
+  .page-head{padding:2rem 0 1rem}
+  .back{display:inline-block;margin-top:1.5rem;font-weight:500}
+  h1.page{font-size:clamp(2rem,5vw,3rem);max-width:20ch;margin-top:2rem}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+  .card{background:var(--paper);border:1px solid var(--lattice);border-radius:12px;padding:1.2rem 1.4rem}
+  .card h3{margin:0 0 .6rem;font-size:1.15rem}
+  .card ul{margin:0;padding-left:1.2rem}.card li{margin-bottom:.4rem}
+  .tag{font:500 .8rem var(--mono);color:var(--teal);white-space:nowrap}
+  .callout{border-left:4px solid var(--teal);padding:.2rem 0 .2rem 1rem;margin:1rem 0;max-width:64ch}
+  @media (max-width:700px){.two{grid-template-columns:1fr}dl.terms{grid-template-columns:1fr}dl.terms dt{margin-top:.6rem}}
+
+  .uses{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.5rem}
+  .use{background:var(--paper);border:1px solid var(--lattice);border-radius:12px;padding:1.25rem 1.4rem}
+  .use h3{margin:0 0 .6rem;font-size:1.25rem}
+  .use p{margin:0 0 .7rem}
+  .use .k{font-weight:600}
+  .tag{display:inline-block;font:500 .8rem var(--mono);border:1px solid var(--lattice);border-radius:999px;padding:.05rem .6rem;color:var(--slate)}
+  @media(max-width:700px){.uses{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="page-head"><div class="wrap">
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="3.5" fill="#2DD4BF"/></svg> Hexagon Mesh</div>
+  <h1 class="page">What can you do with the embeddings?</h1>
+  <p class="lede">Four plain examples for a company with a large pile of public English text: search, SEO, product catalogs and research.</p>
+</div></header>
+<main>
+<section><div class="wrap">
+  <h2>What you get back</h2>
+  <p>For every text you send, you get a list of 384 numbers (a vector). Texts that mean similar things get vectors that sit close together. Everything below uses that one idea: measure how close two vectors are, then sort or group by it.</p>
+  <p><strong>Phones do not replace data centers.</strong> Hexagon Mesh is a low-cost option for large, patient batches of public text. It computes the vectors. Storing them and searching them is your job, and a live search box needs answers in seconds, which this service is not built for.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Four ways to use it</h2>
+  <div class="uses">
+    <article class="use">
+      <h3>Search by meaning</h3>
+      <p><span class="k">Embed:</span> your articles, help pages, documentation or papers, split into pieces of up to 256 tokens.</p>
+      <p><span class="k">Then:</span> embed a visitor's question the same way and return the pieces whose vectors are closest.</p>
+      <p><span class="k">Evidence:</span> on the SciFact benchmark (300 questions, 5,183 science abstracts) the model scored 64.5 nDCG@10, matching its published score. <span class="tag">measured on the real network</span></p>
+      <p><span class="k">Watch for:</span> you need a way to embed each new question quickly. The overnight batch is for the archive, not for live queries.</p>
+    </article>
+    <article class="use">
+      <h3>SEO: related pages and duplicates</h3>
+      <p><span class="k">Embed:</span> the text of the pages on your own site.</p>
+      <p><span class="k">Then:</span> for each page, find the pages with the closest vectors and link them to each other, or flag pairs so close that they may say the same thing.</p>
+      <p><span class="k">Watch for:</span> English only, and 256 tokens per text, so long pages should be cut into sections. Whether this helps your rankings is for you to test; we have no measurement of it.</p>
+    </article>
+    <article class="use">
+      <h3>Product catalogs</h3>
+      <p><span class="k">Embed:</span> public product titles and descriptions.</p>
+      <p><span class="k">Then:</span> suggest similar products, group near-duplicate listings, or let shoppers search by meaning instead of exact words.</p>
+      <p><span class="k">Watch for:</span> descriptions must be public and in English. Prices, stock and customer data do not belong in the text you send.</p>
+    </article>
+    <article class="use">
+      <h3>Research</h3>
+      <p><span class="k">Embed:</span> abstracts, articles or other public text you want to study.</p>
+      <p><span class="k">Then:</span> group similar documents, find the nearest neighbours of one document, or look for gaps between groups.</p>
+      <p><span class="k">Evidence:</span> three phones embedded 3,225,386 arXiv abstracts in 18 hours 37 minutes. <span class="tag">measured on the real network</span></p>
+      <p><span class="k">Watch for:</span> this is one small, general English model. Specialist vocabulary may be handled less well than by a model made for it.</p>
+    </article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>How big a job is realistic?</h2>
+  <p>Three phones embedded all of Simple English Wikipedia: 644,083 passages from 278,882 articles, 67.9 million tokens, with every result checked on a second phone. It was run twice. The first run, in October 2026, took 4 hours 27 minutes (shown on the dataset card). The latest run took 3 hours 18 minutes (shown on the home page). Both are <span class="tag">measured on the real network</span>.</p>
+  <p>The network is small and very large jobs have not been timed, so we do not promise a finish time for them. The dataset is public, so you can look at real output before you decide: <a href="https://huggingface.co/datasets/Hexagonmesh/simple-wikipedia-on-phones">Simple Wikipedia on phones</a>.</p>
+  <p>The price is $0.005 per million tokens, and the first 1 billion tokens every month are free. <a href="cost-estimator.html">Work out the cost of your own job</a>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>When not to use it</h2>
+  <ul class="rules">
+    <li>Anything private or personal. Public, non-personal text only.</li>
+    <li>Languages other than English.</li>
+    <li>Answers needed in seconds.</li>
+    <li>A different model. Only all-MiniLM-L6-v2 is offered.</li>
+  </ul>
+  <p>For the full checklist, read <a href="is-it-right-for-you.html">Is it right for your text?</a></p>
+  <h2>How to start</h2>
+  <p>The public API is not live yet. For now, email a link to your file to <a href="mailto:thehexamesh@gmail.com">thehexamesh@gmail.com</a>, say which of the four uses above is closest to yours, and the embeddings come back as a file.</p>
+  <a class="back" href="index.html">&larr; Back to the home page</a>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <p>Hexagon Mesh is built by Manmohan Bains in Canada.</p>
+  <p><a href="https://github.com/mikebains41-debug/hexagon-mesh-app/blob/main/docs/PRIVACY.md">Privacy policy</a>. Questions: <a href="mailto:thehexamesh@gmail.com">thehexamesh@gmail.com</a></p>
+</div></footer>
+</body>
+</html>
